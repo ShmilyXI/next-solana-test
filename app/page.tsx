@@ -1,13 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import {  PublicKey, Transaction, SystemProgram } from "@solana/web3.js";
-import {  WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import {  useWallet, useConnection } from "@solana/wallet-adapter-react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 
 const Home = () => {
   const recipientAddress = "9XxMs57Vqk7bnHj61KeF1J8n9EB2LxAF4SLZMe2nu1ua"; // 接收地址
   const { connection } = useConnection();
-  const { publicKey, sendTransaction } = useWallet();
+  const { publicKey } = useWallet();
   const [buttonClass, setButtonClass] = useState("button button-connect");
   const [error, setError] = useState("");
 
@@ -28,24 +27,14 @@ const Home = () => {
       connection.getLatestBlockhash(),
       connection.requestAirdrop(publicKey, 1),
     ]);
-    const transaction = new Transaction().add(
-      SystemProgram.transfer({
-        fromPubkey: publicKey,
-        toPubkey: new PublicKey(recipientAddress),
-        lamports: 1, // 转账金额
-      })
-    );
 
     try {
-      const signature = await sendTransaction(transaction, connection);
-      await connection.confirmTransaction(signature, "confirmed");
-      // const sigResult = await connection.confirmTransaction({ signature, ...latestBlockHash }, "confirmed");
-      // if (sigResult) {
-      //   alert("Airdrop was confirmed!");
-      // }
-      alert("转账成功");
+      const sigResult = await connection.confirmTransaction({ signature, ...latestBlockHash }, "confirmed");
+      if (sigResult) {
+        alert("转账成功!");
+      }
     } catch (error) {
-      alert("You are Rate limited for Airdrop");
+      alert("转账失败");
       setError("转账失败");
       setButtonClass("button button-error");
     }
