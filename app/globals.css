@@ -1,9 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* src/styles/globals.css */
 body {
   font-family: Arial, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
 }
 
 .button {
@@ -13,10 +17,6 @@ body {
   cursor: pointer;
   font-size: 16px;
   color: #fff;
-}
-
-.button-connect {
-  background-color: #0070f3;
 }
 
 .button-transfer {
